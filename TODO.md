@@ -1,5 +1,4 @@
 # Must
-- refactor: use config for paths (Chrome, file storage)
 - feat(UI): accept batches with multiple URLs
 - feat(worker): check that url is valid / handle invalid urls
 - feat(worker): mark failed requests as Failed, store reason
@@ -14,3 +13,4 @@
 
 # Could
 - feat(worker): log actions to console
+- feat(UI): cancel a queued request
