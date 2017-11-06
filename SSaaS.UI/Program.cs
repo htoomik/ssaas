@@ -59,6 +59,13 @@ namespace SSaaS.UI
 			var batch = Database.GetBatch(batchId);
 			var status = batch.Status;
 			Console.WriteLine($"The batch with ID {batchId} is {status}.");
+			var messages = batch.Requests.Select(r => r.Message).Where(m => !string.IsNullOrEmpty(m));
+			if (messages.Any())
+			{
+				Console.WriteLine("Messages:");
+				foreach (var message in messages)
+					Console.WriteLine(message);
+			}
 		}
 	}
 }
