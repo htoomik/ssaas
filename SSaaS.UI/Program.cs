@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using SSaaS.Shared;
 
 namespace SSaaS.UI
@@ -8,14 +10,15 @@ namespace SSaaS.UI
 	{
 		static void Main(string[] args)
 		{
-			var command = args[0].ToLower();
+			var arguments = args.Select(a => a.ToLower()).ToList();
+			var command = arguments[0];
 			switch (command)
 			{
 				case "queue":
-					Queue(args[1]);
+					Queue(arguments[1], arguments[2]);
 					break;
 				case "status":
-					Status(int.Parse(args[1]));
+					Status(int.Parse(arguments[1]));
 					break;
 				default:
 					throw new Exception($"unknown command '{command}'");
@@ -23,14 +26,31 @@ namespace SSaaS.UI
 		}
 
 
-		private static void Queue(string url)
+		private static void Queue(string queueSourceType, string queueSource)
 		{
-			var batch = new Batch 
+			List<Request> requests;
+			switch (queueSourceType)
 			{
-				Requests = new List<Request> { new Request { Url = url }}
-			};
+				case "-url":
+					requests = new List<Request> { new Request { Url = queueSource } };
+					break;
+				case "-file":
+					var urls = GetUrlsFromFile(queueSource);
+					requests = urls.Select(url => new Request { Url = url }).ToList();
+					break;
+				default:
+					throw new Exception("Unknown queue source " + queueSourceType);
+			}
+			var batch = new Batch { Requests = requests };
 			Database.AddBatch(batch);
 			Console.WriteLine($"Batch queued. Your batch ID is {batch.Id.Value}.");
+		}
+
+
+		private static List<string> GetUrlsFromFile(string arg2)
+		{
+			var fileContent = File.ReadAllLines(arg2);
+			return fileContent.ToList();
 		}
 
 

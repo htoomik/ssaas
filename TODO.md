@@ -1,5 +1,4 @@
 # Must
-- feat(UI): accept batches with multiple URLs
 - feat(worker): check that url is valid / handle invalid urls
 - feat(worker): mark failed requests as Failed, store reason
 
