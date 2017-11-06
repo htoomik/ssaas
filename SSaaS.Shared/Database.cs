@@ -110,8 +110,7 @@ namespace SSaaS.Shared
 
 		public static SqliteConnection GetConnection()
 		{
-			// TODO: relative path
-			const string path = "/Users/helen/Code/ssaas/ssaas.sqlite3";
+			var path = new ConfigLoader().LoadConfig().DatabasePath;
 			var fullPath = Path.GetFullPath(path);
 			if (!File.Exists(fullPath))
 				throw new Exception("File not found at " + fullPath);

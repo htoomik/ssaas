@@ -1,6 +1,7 @@
 using System;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using SSaaS.Shared;
 
 namespace SSaaS.Worker
 {
@@ -9,7 +10,7 @@ namespace SSaaS.Worker
 		public void SaveScreenshot(string url, string path)
 		{
 			var chromeOptions = new ChromeOptions();
-			chromeOptions.BinaryLocation = "/Applications/Chrome.app/Contents/MacOS/Google Chrome";
+			chromeOptions.BinaryLocation = new ConfigLoader().LoadConfig().ChromePath;
 			using (var driver = new ChromeDriver(".", chromeOptions))
 			{
 				driver.Navigate().GoToUrl(url);
