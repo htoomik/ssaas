@@ -10,7 +10,7 @@ namespace SSaaS.UI
 	{
 		static void Main(string[] args)
 		{
-			var command = new ArgumentParser().Parse(args, new Database());
+			var command = new ArgumentParser().Parse(args, new Database(), new ConsoleWrapper());
 			command.Execute();
 		}
 	}

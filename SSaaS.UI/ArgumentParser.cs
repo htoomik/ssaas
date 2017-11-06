@@ -6,7 +6,7 @@ namespace SSaaS.UI
 {
 	public class ArgumentParser
 	{
-		public ICommand Parse(string[] args, IDatabase database)
+		public ICommand Parse(string[] args, IDatabase database, IConsole console)
 		{
 			var arguments = args.Select(a => a.ToLower()).ToList();
 			var command = arguments[0];
@@ -23,7 +23,7 @@ namespace SSaaS.UI
 							throw new Exception("Unknown argument for 'queue' command");
 					}
 				case "status":
-					return new StatusCommand(int.Parse(arguments[1]), database);
+					return new StatusCommand(int.Parse(arguments[1]), database, console);
 				default:
 					throw new Exception($"unknown command '{command}'");
 			}

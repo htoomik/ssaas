@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using SSaaS.Shared;
 
@@ -7,13 +6,16 @@ namespace SSaaS.UI
 	public class StatusCommand : ICommand
 	{
 		private readonly IDatabase database;
+		private readonly IConsole console;
 
 		public int BatchId { get; }
 
 
-		public StatusCommand(int batchId, IDatabase database)
+		public StatusCommand(int batchId, IDatabase database, IConsole console)
 		{
 			this.database = database;
+			this.console = console;
+			
 			BatchId = batchId;
 		}
 
@@ -21,13 +23,13 @@ namespace SSaaS.UI
 		public void Execute()
 		{
 			var batch = database.GetBatch(BatchId);
-			Console.WriteLine($"The status for batch {BatchId} is {batch.Status}.");
+			console.WriteLine($"The status for batch {BatchId} is {batch.Status}.");
 			var messages = batch.Requests.Select(r => r.Message).Where(m => !string.IsNullOrEmpty(m));
 			if (messages.Any())
 			{
-				Console.WriteLine("Messages:");
+				console.WriteLine("Messages:");
 				foreach (var message in messages)
-					Console.WriteLine(message);
+					console.WriteLine(message);
 			}
 		}
 	}
