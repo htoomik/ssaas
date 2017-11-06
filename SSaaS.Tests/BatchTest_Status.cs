@@ -36,10 +36,26 @@ namespace SSaaS.Tests
 
 			Assert.Equal(RequestStatus.Done, batch.Status);
 		}
+
+
+		[Fact]
+		public void When_AnyFailed_Expect_Failed()
+		{
+			var batch = new Batch
+			{
+				Requests = new List<Request> 
+				{
+					new Request { Status = RequestStatus.Failed },
+					new Request { Status = RequestStatus.Done },
+				}
+			};
+
+			Assert.Equal(RequestStatus.Failed, batch.Status);
+		}
 		
 		
 		[Fact]
-		public void When_Mixed_Expect_Processing()
+		public void When_Mixed_And_NoneFailed_Expect_Processing()
 		{
 			var batch = new Batch
 			{

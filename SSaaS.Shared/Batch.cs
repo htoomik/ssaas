@@ -12,9 +12,12 @@ namespace SSaaS.Shared
 		{
 			get
 			{
+				var anyFailed = Requests.Any(r => r.Status == RequestStatus.Failed);
 				var allDone = Requests.All(r => r.Status == RequestStatus.Done);
 				var allNew = Requests.All(r => r.Status == RequestStatus.New);
 
+				if (anyFailed)
+					return RequestStatus.Failed;
 				if (allDone)
 					return RequestStatus.Done;
 				if (allNew)
