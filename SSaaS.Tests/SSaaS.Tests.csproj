@@ -16,9 +16,4 @@
     <ProjectReference Include="..\SSaaS.Shared\SSaaS.Shared.csproj" />
     <ProjectReference Include="..\SSaaS.Worker\SSaaS.Worker.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <None Include="appsettings.json" CopyToOutputDirectory="Always" />
-  </ItemGroup>
-
 </Project>

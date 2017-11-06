@@ -12,7 +12,6 @@
 
   <ItemGroup>
     <None Include="chromedriver" CopyToOutputDirectory="Always" />
-    <None Include="appsettings.json" CopyToOutputDirectory="Always" />
   </ItemGroup>
 
   <PropertyGroup>
