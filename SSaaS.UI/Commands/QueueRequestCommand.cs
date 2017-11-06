@@ -6,12 +6,15 @@ namespace SSaaS.UI
 {
 	public class QueueRequestCommand : ICommand
 	{
+		private IDatabase database;
+
 		public string Url { get; }
 
 
-		public QueueRequestCommand(string url)
+		public QueueRequestCommand(string url, IDatabase database)
 		{
 			Url = url;
+			this.database = database;
 		}
 
 
@@ -19,7 +22,7 @@ namespace SSaaS.UI
 		{
 			var requests = new List<Request> { new Request { Url = Url } };
 			var batch = new Batch { Requests = requests };
-			Database.AddBatch(batch);
+			database.AddBatch(batch);
 			Console.WriteLine($"Batch queued. Your batch ID is {batch.Id.Value}.");
 		}
 	}

@@ -8,9 +8,10 @@ namespace SSaaS.Worker
 	{
 		static void Main(string[] args)
 		{
+			var database = new Database();
 			while (true)
 			{
-				var request = Database.GetNextRequest();
+				var request = database.GetNextRequest();
 				if (request != null)
 				{
 					Logger.Log($"Found request {request.Id} for url {request.Url}");
@@ -39,7 +40,7 @@ namespace SSaaS.Worker
 							message = ex.Message;
 						}
 					}
-					Database.SetStatus(request, status, message);
+					database.SetStatus(request, status, message);
 				}
 				else
 				{

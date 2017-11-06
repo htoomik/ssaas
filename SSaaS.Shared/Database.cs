@@ -6,9 +6,9 @@ using Microsoft.Data.Sqlite;
 
 namespace SSaaS.Shared
 {
-	public static class Database
+	public class Database : IDatabase
 	{
-		public static void AddBatch(Batch batch)
+		public void AddBatch(Batch batch)
 		{
 			const string sql1 = @"
 				INSERT INTO batches (batchId) VALUES (null);
@@ -37,7 +37,7 @@ namespace SSaaS.Shared
 		}
 
 
-		public static Batch GetBatch(long batchId)
+		public Batch GetBatch(long batchId)
 		{
 			const string sql = @"
 				SELECT requestId, url, status, message 
@@ -66,7 +66,7 @@ namespace SSaaS.Shared
 		}
 
 		
-		public static Request GetNextRequest()
+		public Request GetNextRequest()
 		{
 			const string sql = @"
 				SELECT batchId, requestId, url, status
@@ -93,7 +93,7 @@ namespace SSaaS.Shared
 		}
 
 
-		public static void SetStatus(Request request, RequestStatus newStatus, string message = null)
+		public void SetStatus(Request request, RequestStatus newStatus, string message = null)
 		{
 			const string sql = @"
 				UPDATE requests
@@ -114,7 +114,7 @@ namespace SSaaS.Shared
 		}
 
 
-		public static SqliteConnection GetConnection()
+		public SqliteConnection GetConnection()
 		{
 			var path = new ConfigLoader().LoadConfig().DatabasePath;
 			var fullPath = Path.GetFullPath(path);

@@ -38,7 +38,7 @@ namespace SSaaS.Tests
 			};
 			AddBatch(batch);
 
-			var actual = Database.GetBatch(batch.Id.Value);
+			var actual = new Database().GetBatch(batch.Id.Value);
 			Assert.Equal(batch.Requests.Count, actual.Requests.Count);
 			Assert.Equal(batch.Requests[0].Status, actual.Requests[0].Status);
 		}
@@ -59,7 +59,7 @@ namespace SSaaS.Tests
 			};
 			AddBatch(batch);
 
-			var actual = Database.GetNextRequest();
+			var actual = new Database().GetNextRequest();
 			Assert.Equal("2", actual.Url);
 		}
 
@@ -79,7 +79,7 @@ namespace SSaaS.Tests
 			};
 			AddBatch(batch);
 
-			var actual = Database.GetNextRequest();
+			var actual = new Database().GetNextRequest();
 			Assert.Null(actual);
 		}
 
@@ -95,9 +95,9 @@ namespace SSaaS.Tests
 
 			const RequestStatus newStatus = RequestStatus.Processing;
 			const string message = "some message";
-			Database.SetStatus(batch.Requests[0], newStatus, message);
+			new Database().SetStatus(batch.Requests[0], newStatus, message);
 
-			var request = Database.GetBatch(batch.Id.Value).Requests[0];
+			var request = new Database().GetBatch(batch.Id.Value).Requests[0];
 			Assert.Equal(newStatus, request.Status);
 			Assert.Equal(message, request.Message);
 		}
@@ -105,14 +105,14 @@ namespace SSaaS.Tests
 
 		private void AddBatch(Batch batch)
 		{
-			Database.AddBatch(batch);
+			new Database().AddBatch(batch);
 			batchIds.Add(batch.Id.Value);
 		}
 
 
 		private static Batch GetBatch(long batchId)
 		{
-			using (var connection = Database.GetConnection())
+			using (var connection = new Database().GetConnection())
 			{
 				var sql = @"
 				SELECT requestId, url, status
@@ -141,7 +141,7 @@ namespace SSaaS.Tests
 
 		public void Dispose()
 		{
-			using (var connection = Database.GetConnection())
+			using (var connection = new Database().GetConnection())
 			{
 				foreach (var batchId in batchIds)
 				{

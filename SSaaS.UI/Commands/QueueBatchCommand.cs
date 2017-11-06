@@ -8,12 +8,15 @@ namespace SSaaS.UI
 {
 	public class QueueBatchCommand : ICommand
 	{
+		private IDatabase database;
+		
 		public string FilePath { get; }
 
 
-		public QueueBatchCommand(string filePath)
+		public QueueBatchCommand(string filePath, IDatabase database)
 		{
 			FilePath = filePath;
+			this.database = database;
 		}
 		
 
@@ -22,7 +25,7 @@ namespace SSaaS.UI
 			var urls = GetUrlsFromFile(FilePath);
 			var requests = urls.Select(url => new Request { Url = url }).ToList();
 			var batch = new Batch { Requests = requests };
-			Database.AddBatch(batch);
+			database.AddBatch(batch);
 			Console.WriteLine($"Batch queued. Your batch ID is {batch.Id.Value}.");
 		}
 
