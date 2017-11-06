@@ -16,18 +16,28 @@ namespace SSaaS.Worker
 					Logger.Log($"Found request {request.Id} for url {request.Url}");
 					RequestStatus status;
 					string message = null;
-					try
+
+					if (!IsValidUrl(request.Url))
 					{
-						var path = ImagePathGenerator.GeneratePathFor(request);
-						Logger.Log($"Saving screenshot at {path}");
-						new ScreenshotTaker().SaveScreenshot(request.Url, path);
-						status = RequestStatus.Done;
-					}
-					catch (Exception ex)
-					{
-						Logger.Log(ex.Message);
 						status = RequestStatus.Failed;
-						message = ex.Message;
+						message = "Invalid URL";
+						Logger.Log($"'{request.Url}' is an invalid url; skipping");
+					}
+					else
+					{
+						try
+						{
+							var path = ImagePathGenerator.GeneratePathFor(request);
+							Logger.Log($"Saving screenshot at {path}");
+							new ScreenshotTaker().SaveScreenshot(request.Url, path);
+							status = RequestStatus.Done;
+						}
+						catch (Exception ex)
+						{
+							Logger.Log(ex.Message);
+							status = RequestStatus.Failed;
+							message = ex.Message;
+						}
 					}
 					Database.SetStatus(request, status, message);
 				}
@@ -35,6 +45,20 @@ namespace SSaaS.Worker
 				{
 					Thread.Sleep(1000);
 				}
+			}
+		}
+
+
+		private static bool IsValidUrl(string urlString)
+		{
+			try
+			{
+				var urlObject = new Uri(urlString);
+				return true;
+			}
+			catch
+			{
+				return false;
 			}
 		}
 	}
