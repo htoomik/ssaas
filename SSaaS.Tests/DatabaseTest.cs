@@ -30,18 +30,17 @@ namespace SSaaS.Tests
 
 
 		[Fact]
-		public void GetStatus_ReturnsStatus()
+		public void GetBatch_ReturnsBatch()
 		{
-			const RequestStatus status = RequestStatus.Done;
 			var batch = new Batch
 			{ 
-				Requests = new List<Request> { new Request { Status = status } }
+				Requests = new List<Request> { new Request { Status = RequestStatus.Done } }
 			};
 			AddBatch(batch);
 
-			var actual = Database.GetStatus(batch.Id.Value);
-			Assert.Equal(1, actual.Count);
-			Assert.Equal(status, actual[0]);
+			var actual = Database.GetBatch(batch.Id.Value);
+			Assert.Equal(batch.Requests.Count, actual.Requests.Count);
+			Assert.Equal(batch.Requests[0].Status, actual.Requests[0].Status);
 		}
 
 

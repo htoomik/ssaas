@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SSaaS.Shared
 {
@@ -6,6 +7,21 @@ namespace SSaaS.Shared
 	{
 		public long? Id;
 		public List<Request> Requests = new List<Request>();
+
+		public RequestStatus Status 
+		{
+			get
+			{
+				var allDone = Requests.All(r => r.Status == RequestStatus.Done);
+				var allNew = Requests.All(r => r.Status == RequestStatus.New);
+
+				if (allDone)
+					return RequestStatus.Done;
+				if (allNew)
+					return RequestStatus.New;
+				return RequestStatus.Processing;
+			}
+		}
 	}
 
 

@@ -34,21 +34,26 @@ namespace SSaaS.Shared
 		}
 
 
-		public static List<RequestStatus> GetStatus(long batchId)
+		public static Batch GetBatch(long batchId)
 		{
-			const string sql = "SELECT status FROM requests WHERE batchId = @batchId";
+			const string sql = "SELECT requestId, url, status FROM requests WHERE batchId = @batchId";
 			using (var connection = GetConnection())
 			{
 				var command = new SqliteCommand(sql, connection);
 				command.Parameters.AddWithValue("@batchId", batchId);
 				using (var reader = command.ExecuteReader())
 				{
-					var results = new List<RequestStatus>();
+					var requests = new List<Request>();
 					while (reader.Read())
 					{
-						results.Add(reader[0].ToString().ParseAs<RequestStatus>());
+						requests.Add(new Request 
+						{
+							Id = (long)reader["requestId"],
+							Url = reader["url"].ToString(), 
+							Status = reader["status"].ToString().ParseAs<RequestStatus>()
+						});
 					}
-					return results;
+					return new Batch { Id = batchId, Requests = requests };
 				}
 			}
 		}

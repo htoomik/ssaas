@@ -36,7 +36,8 @@ namespace SSaaS.UI
 
 		private static void Status(int batchId)
 		{
-			var status = Database.GetStatus(batchId);
+			var batch = Database.GetBatch(batchId);
+			var status = batch.Status;
 			Console.WriteLine($"The batch with ID {batchId} is {status}.");
 		}
 	}
