@@ -8,7 +8,7 @@ namespace SSaaS.UI
 {
 	public class QueueBatchCommand : ICommand
 	{
-		private IDatabase database;
+		private readonly IDatabase database;
 		
 		public string FilePath { get; }
 

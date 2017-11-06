@@ -6,7 +6,7 @@ namespace SSaaS.UI
 {
 	public class QueueRequestCommand : ICommand
 	{
-		private IDatabase database;
+		private readonly IDatabase database;
 
 		public string Url { get; }
 

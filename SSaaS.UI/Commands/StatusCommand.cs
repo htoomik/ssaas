@@ -6,7 +6,7 @@ namespace SSaaS.UI
 {
 	public class StatusCommand : ICommand
 	{
-		private IDatabase database;
+		private readonly IDatabase database;
 
 		public int BatchId { get; }
 
