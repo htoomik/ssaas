@@ -39,7 +39,10 @@ namespace SSaaS.Shared
 
 		public static Batch GetBatch(long batchId)
 		{
-			const string sql = "SELECT requestId, url, status FROM requests WHERE batchId = @batchId";
+			const string sql = @"
+				SELECT requestId, url, status, message 
+				FROM requests 
+				WHERE batchId = @batchId";
 			using (var connection = GetConnection())
 			{
 				var command = new SqliteCommand(sql, connection);
@@ -53,7 +56,8 @@ namespace SSaaS.Shared
 						{
 							Id = (long)reader["requestId"],
 							Url = reader["url"].ToString(), 
-							Status = reader["status"].ToString().ParseAs<RequestStatus>()
+							Status = reader["status"].ToString().ParseAs<RequestStatus>(),
+							Message = reader["message"].ToString()
 						});
 					}
 					return new Batch { Id = batchId, Requests = requests };

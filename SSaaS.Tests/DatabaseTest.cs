@@ -93,11 +93,13 @@ namespace SSaaS.Tests
 			};
 			AddBatch(batch);
 
-			var newStatus = RequestStatus.Processing;
-			Database.SetStatus(batch.Requests[0], newStatus);
+			const RequestStatus newStatus = RequestStatus.Processing;
+			const string message = "some message";
+			Database.SetStatus(batch.Requests[0], newStatus, message);
 
-			var actualStatus = Database.GetBatch(batch.Id.Value).Requests[0].Status;
-			Assert.Equal(newStatus, actualStatus);
+			var request = Database.GetBatch(batch.Id.Value).Requests[0];
+			Assert.Equal(newStatus, request.Status);
+			Assert.Equal(message, request.Message);
 		}
 
 

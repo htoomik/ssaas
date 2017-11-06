@@ -34,5 +34,6 @@ namespace SSaaS.Shared
 		public long? BatchId;
 		public string Url;
 		public RequestStatus Status;
+		public string Message;
 	}
 }
