@@ -13,9 +13,23 @@ namespace SSaaS.Worker
 				var request = Database.GetNextRequest();
 				if (request != null)
 				{
-					var path = ImagePathGenerator.GeneratePathFor(request);
-					new ScreenshotTaker().SaveScreenshot(request.Url, path);
-					Database.SetStatus(request, RequestStatus.Done);
+					Logger.Log($"Found request {request.Id} for url {request.Url}");
+					RequestStatus status;
+					string message = null;
+					try
+					{
+						var path = ImagePathGenerator.GeneratePathFor(request);
+						Logger.Log($"Saving screenshot at {path}");
+						new ScreenshotTaker().SaveScreenshot(request.Url, path);
+						status = RequestStatus.Done;
+					}
+					catch (Exception ex)
+					{
+						Logger.Log(ex.Message);
+						status = RequestStatus.Failed;
+						message = ex.Message;
+					}
+					Database.SetStatus(request, status, message);
 				}
 				else
 				{

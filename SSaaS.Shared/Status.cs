@@ -4,6 +4,7 @@ namespace SSaaS.Shared
 	{
 		New,
 		Processing,
-		Done
+		Done,
+		Failed
 	}
 }

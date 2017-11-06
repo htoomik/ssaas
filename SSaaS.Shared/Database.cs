@@ -89,11 +89,12 @@ namespace SSaaS.Shared
 		}
 
 
-		public static void SetStatus(Request request, RequestStatus newStatus)
+		public static void SetStatus(Request request, RequestStatus newStatus, string message = null)
 		{
 			const string sql = @"
 				UPDATE requests
-				SET status = @status
+				SET status = @status,
+					message = @message
 				WHERE requestId = @requestId
 					AND batchId = @batchId;";
 			
@@ -103,6 +104,7 @@ namespace SSaaS.Shared
 				command.Parameters.AddWithValue("@batchId", request.BatchId.Value);
 				command.Parameters.AddWithValue("@requestId", request.Id.Value);
 				command.Parameters.AddWithValue("@status", newStatus.ToString());
+				command.Parameters.AddWithValue("@message", (object)message ?? DBNull.Value);
 				command.ExecuteNonQuery();
 			}
 		}
