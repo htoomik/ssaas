@@ -15,7 +15,8 @@ namespace SSaaS.Shared
 				SELECT last_insert_rowid();";
 
 			const string sql2 = @"
-				INSERT INTO requests (batchId, url, status) VALUES (@batchId, @url, @status)";
+				INSERT INTO requests (batchId, url, status) VALUES (@batchId, @url, @status);
+				SELECT last_insert_rowid();";
 
 			using (var connection = GetConnection())
 			{
@@ -24,11 +25,13 @@ namespace SSaaS.Shared
 
 				foreach (var request in batch.Requests)
 				{
+					request.BatchId = batch.Id;
+
 					var command2 = new SqliteCommand(sql2, connection);
-					command2.Parameters.AddWithValue("@batchId", batch.Id.Value);
+					command2.Parameters.AddWithValue("@batchId", request.BatchId);
 					command2.Parameters.AddWithValue("@url", ((object)request.Url) ?? DBNull.Value);
 					command2.Parameters.AddWithValue("@status", request.Status.ToString());
-					command2.ExecuteNonQuery();
+					request.Id = (long)command2.ExecuteScalar();
 				}
 			}
 		}
@@ -55,6 +58,52 @@ namespace SSaaS.Shared
 					}
 					return new Batch { Id = batchId, Requests = requests };
 				}
+			}
+		}
+
+		
+		public static Request GetNextRequest()
+		{
+			const string sql = @"
+				SELECT batchId, requestId, url, status
+				FROM requests
+				WHERE status = 'New'
+				ORDER BY requestId
+				LIMIT 1";
+			using (var connection = GetConnection())
+			{
+				var command = new SqliteCommand(sql, connection);
+				using (var reader = command.ExecuteReader())
+				{
+					if (!reader.Read())
+						return null;
+					return new Request
+					{
+						Id = (long)reader["requestId"],
+						BatchId = (long)reader["batchId"],
+						Url = reader["url"].ToString(),
+						Status = reader["status"].ToString().ParseAs<RequestStatus>()
+					};
+				}
+			}
+		}
+
+
+		public static void SetStatus(Request request, RequestStatus newStatus)
+		{
+			const string sql = @"
+				UPDATE requests
+				SET status = @status
+				WHERE requestId = @requestId
+					AND batchId = @batchId;";
+			
+			using (var connection = GetConnection())
+			{
+				var command = new SqliteCommand(sql, connection);
+				command.Parameters.AddWithValue("@batchId", request.BatchId.Value);
+				command.Parameters.AddWithValue("@requestId", request.Id.Value);
+				command.Parameters.AddWithValue("@status", newStatus.ToString());
+				command.ExecuteNonQuery();
 			}
 		}
 
