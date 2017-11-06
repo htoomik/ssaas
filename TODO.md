@@ -1,6 +1,5 @@
 # Must
 - feat(worker): check that url is valid / handle invalid urls
-- feat(worker): mark failed requests as Failed, store reason
 - refactor(config): remove duplication of appsettings.json
 
 # Should
@@ -14,5 +13,4 @@
 - refactor(worker): move logic out of Program, make testable
 
 # Could
-- feat(worker): log actions to console
 - feat(UI): cancel a queued request
