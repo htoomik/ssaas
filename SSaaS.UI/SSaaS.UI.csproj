@@ -9,4 +9,8 @@
     <ProjectReference Include="..\SSaaS.Shared\SSaaS.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="appsettings.json" CopyToOutputDirectory="Always" />
+  </ItemGroup>
+
 </Project>
