@@ -15,5 +15,6 @@
   <ItemGroup>
     <ProjectReference Include="..\SSaaS.Shared\SSaaS.Shared.csproj" />
     <ProjectReference Include="..\SSaaS.Worker\SSaaS.Worker.csproj" />
+    <ProjectReference Include="..\SSaaS.UI\SSaaS.UI.csproj" />
   </ItemGroup>
 </Project>

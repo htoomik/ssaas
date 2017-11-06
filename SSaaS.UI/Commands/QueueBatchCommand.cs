@@ -8,17 +8,18 @@ namespace SSaaS.UI
 {
 	public class QueueBatchCommand : ICommand
 	{
-		private string filePath;
+		public string FilePath { get; }
+
 
 		public QueueBatchCommand(string filePath)
 		{
-			this.filePath = filePath;
+			FilePath = filePath;
 		}
 		
 
 		public void Execute()
 		{
-			var urls = GetUrlsFromFile(filePath);
+			var urls = GetUrlsFromFile(FilePath);
 			var requests = urls.Select(url => new Request { Url = url }).ToList();
 			var batch = new Batch { Requests = requests };
 			Database.AddBatch(batch);
