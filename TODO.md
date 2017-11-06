@@ -1,6 +1,7 @@
 # Must
 - feat(worker): check that url is valid / handle invalid urls
 - feat(worker): mark failed requests as Failed, store reason
+- refactor(config): remove duplication of appsettings.json
 
 # Should
 - refactor: store image path in db
@@ -9,6 +10,8 @@
 - tests: ScreenshotTakerTest should validate that the file is a valid image
 - feat(UI): provide path to screenshot when request is done
 - feat(UI): report failure reason for failed requests
+- refactor: argument parsing
+- refactor(worker): move logic out of Program, make testable
 
 # Could
 - feat(worker): log actions to console
