@@ -35,5 +35,6 @@ namespace SSaaS.Shared
 		public string Url;
 		public RequestStatus Status;
 		public string Message;
+		public string Path;
 	}
 }

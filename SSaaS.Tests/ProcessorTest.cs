@@ -51,7 +51,7 @@ namespace SSaaS.Tests
 			database.Setup(d => d.GetNextRequest()).Returns(request);
 
 			// Assert
-			database.Setup(d => d.SetStatus(request, RequestStatus.Done, null));
+			database.Setup(d => d.SetStatus(request, RequestStatus.Done, null, It.IsAny<string>()));
 			
 			new Processor(database.Object, screenshotTaker.Object).Process();
 
@@ -88,7 +88,7 @@ namespace SSaaS.Tests
 			database.Setup(d => d.GetNextRequest()).Returns(request);
 
 			// Assert
-			database.Setup(d => d.SetStatus(request, RequestStatus.Failed, It.IsAny<string>()));
+			database.Setup(d => d.SetStatus(request, RequestStatus.Failed, It.IsAny<string>(), null));
 			
 			new Processor(database.Object, screenshotTaker.Object).Process();
 

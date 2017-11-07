@@ -24,6 +24,7 @@ namespace SSaaS.Worker
 				Logger.Log($"Found request {request.Id} for url {request.Url}");
 				RequestStatus status;
 				string message = null;
+				string path = null;
 
 				if (!IsValidUrl(request.Url))
 				{
@@ -35,7 +36,7 @@ namespace SSaaS.Worker
 				{
 					try
 					{
-						var path = ImagePathGenerator.GeneratePathFor(request);
+						path = ImagePathGenerator.GeneratePathFor(request);
 						Logger.Log($"Saving screenshot at {path}");
 						screenshotTaker.SaveScreenshot(request.Url, path);
 						status = RequestStatus.Done;
@@ -47,7 +48,7 @@ namespace SSaaS.Worker
 						message = ex.Message;
 					}
 				}
-				database.SetStatus(request, status, message);
+				database.SetStatus(request, status, message, path);
 			}
 			else
 			{

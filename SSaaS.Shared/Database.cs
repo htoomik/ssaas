@@ -40,7 +40,7 @@ namespace SSaaS.Shared
 		public Batch GetBatch(long batchId)
 		{
 			const string sql = @"
-				SELECT requestId, url, status, message 
+				SELECT requestId, url, status, message, imagePath 
 				FROM requests 
 				WHERE batchId = @batchId";
 			using (var connection = GetConnection())
@@ -57,7 +57,8 @@ namespace SSaaS.Shared
 							Id = (long)reader["requestId"],
 							Url = reader["url"].ToString(), 
 							Status = reader["status"].ToString().ParseAs<RequestStatus>(),
-							Message = reader["message"].ToString()
+							Message = reader["message"].ToString(),
+							Path = reader["imagePath"].ToString()
 						});
 					}
 					return new Batch { Id = batchId, Requests = requests };
@@ -93,12 +94,13 @@ namespace SSaaS.Shared
 		}
 
 
-		public void SetStatus(Request request, RequestStatus newStatus, string message = null)
+		public void SetStatus(Request request, RequestStatus newStatus, string message = null, string path = null)
 		{
 			const string sql = @"
 				UPDATE requests
 				SET status = @status,
-					message = @message
+					message = @message,
+					imagePath = @path
 				WHERE requestId = @requestId
 					AND batchId = @batchId;";
 			
@@ -109,6 +111,7 @@ namespace SSaaS.Shared
 				command.Parameters.AddWithValue("@requestId", request.Id.Value);
 				command.Parameters.AddWithValue("@status", newStatus.ToString());
 				command.Parameters.AddWithValue("@message", (object)message ?? DBNull.Value);
+				command.Parameters.AddWithValue("@path", (object)path ?? DBNull.Value);
 				command.ExecuteNonQuery();
 			}
 		}

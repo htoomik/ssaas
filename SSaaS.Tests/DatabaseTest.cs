@@ -95,11 +95,13 @@ namespace SSaaS.Tests
 
 			const RequestStatus newStatus = RequestStatus.Processing;
 			const string message = "some message";
-			new Database().SetStatus(batch.Requests[0], newStatus, message);
+			const string path = "some path";
+			new Database().SetStatus(batch.Requests[0], newStatus, message, path);
 
 			var request = new Database().GetBatch(batch.Id.Value).Requests[0];
 			Assert.Equal(newStatus, request.Status);
 			Assert.Equal(message, request.Message);
+			Assert.Equal(path, request.Path);
 		}
 
 
