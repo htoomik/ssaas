@@ -5,7 +5,7 @@ using SSaaS.Shared;
 
 namespace SSaaS.Worker
 {
-	public class ScreenshotTaker
+	public class ScreenshotTaker : IScreenshotTaker
 	{
 		public void SaveScreenshot(string url, string path)
 		{
