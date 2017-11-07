@@ -27,7 +27,16 @@ namespace SSaaS.UI
 
 		public void Execute()
 		{
-			var urls = GetUrlsFromFile(FilePath);
+			List<string> urls;
+			try
+			{
+				urls = GetUrlsFromFile(FilePath);
+			}
+			catch (Exception ex)
+			{
+				console.WriteLine("Error getting urls from file: " + ex.Message);
+				return;
+			}
 			var requests = urls.Select(url => new Request { Url = url }).ToList();
 			var batch = new Batch { Requests = requests };
 			database.AddBatch(batch);
