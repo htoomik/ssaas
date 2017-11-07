@@ -6,7 +6,7 @@ namespace SSaaS.UI
 {
 	public class ArgumentParser
 	{
-		public ICommand Parse(string[] args, IDatabase database, IConsole console)
+		public ICommand Parse(string[] args, IDatabase database, IConsole console, IFileSystem fileSystem)
 		{
 			var arguments = args.Select(a => a.ToLower()).ToList();
 			var command = arguments[0];
@@ -16,9 +16,9 @@ namespace SSaaS.UI
 					switch (arguments[1])
 					{
 						case "-url":
-							return new QueueRequestCommand(arguments[2], database);
+							return new QueueRequestCommand(arguments[2], database, console);
 						case "-file":
-							return new QueueBatchCommand(arguments[2], database);
+							return new QueueBatchCommand(arguments[2], database, console, fileSystem);
 						default:
 							throw new Exception("Unknown argument for 'queue' command");
 					}

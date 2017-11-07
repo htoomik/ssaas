@@ -13,8 +13,9 @@ namespace SSaaS.Tests
 			const int batchId = 10;
 			var db = new Mock<IDatabase>().Object;
 			var c = new Mock<IConsole>().Object;
+			var fs = new Mock<IFileSystem>().Object;
 
-			var command = new ArgumentParser().Parse(new [] { "status", batchId.ToString() }, db, c);
+			var command = new ArgumentParser().Parse(new [] { "status", batchId.ToString() }, db, c, fs);
 			Assert.IsType<StatusCommand>(command);
 
 			var statusCommand = (StatusCommand)command;
@@ -28,8 +29,9 @@ namespace SSaaS.Tests
 			const string filePath = "path\\to\\some\\file.txt";
 			var db = new Mock<IDatabase>().Object;
 			var c = new Mock<IConsole>().Object;
+			var fs = new Mock<IFileSystem>().Object;
 
-			var command = new ArgumentParser().Parse(new [] { "queue", "-file", filePath }, db, c);
+			var command = new ArgumentParser().Parse(new [] { "queue", "-file", filePath }, db, c, fs);
 			Assert.IsType<QueueBatchCommand>(command);
 
 			var queueCommand = (QueueBatchCommand)command;
@@ -43,8 +45,9 @@ namespace SSaaS.Tests
 			const string url = "https://some.url.com/";
 			var db = new Mock<IDatabase>().Object;
 			var c = new Mock<IConsole>().Object;
+			var fs = new Mock<IFileSystem>().Object;
 
-			var command = new ArgumentParser().Parse(new [] { "queue", "-url", url }, db, c);
+			var command = new ArgumentParser().Parse(new [] { "queue", "-url", url }, db, c, fs);
 			Assert.IsType<QueueRequestCommand>(command);
 
 			var queueCommand = (QueueRequestCommand)command;
