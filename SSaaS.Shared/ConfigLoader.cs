@@ -7,9 +7,14 @@ namespace SSaaS.Shared
 	{
 		public Config LoadConfig()
 		{
+			const string configFile = "appsettings.json";
+			var basePath = Directory.GetCurrentDirectory();
+			if (!File.Exists(Path.Combine(basePath, configFile)))
+				basePath = Directory.GetParent(basePath).FullName;
+
 			var builder = new ConfigurationBuilder()
-				.SetBasePath(Directory.GetCurrentDirectory())
-				.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+				.SetBasePath(basePath)
+				.AddJsonFile(configFile, optional: false, reloadOnChange: true);
 			var configuration = builder.Build();
 
 			var config = new Config();
