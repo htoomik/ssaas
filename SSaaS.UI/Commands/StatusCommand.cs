@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using SSaaS.Shared;
 
@@ -23,13 +24,27 @@ namespace SSaaS.UI
 		public void Execute()
 		{
 			var batch = database.GetBatch(BatchId);
-			console.WriteLine($"The status for batch {BatchId} is {batch.Status}.");
-			var messages = batch.Requests.Select(r => r.Message).Where(m => !string.IsNullOrEmpty(m));
-			if (messages.Any())
+			console.WriteLine($"The overall status for batch {BatchId} is {batch.Status}.");
+
+			foreach (var request in batch.Requests)
 			{
-				console.WriteLine("Messages:");
-				foreach (var message in messages)
-					console.WriteLine(message);
+				switch (request.Status)
+				{
+					case RequestStatus.New:
+						console.WriteLine($"The request for {request.Url} has not been processed yet.");
+						break;
+					case RequestStatus.Processing:
+						console.WriteLine($"The request for {request.Url} is being processed.");
+						break;
+					case RequestStatus.Done:
+						console.WriteLine($"A screenshot for {request.Url} has been saved at {request.Path}");
+						break;
+					case RequestStatus.Failed:
+						console.WriteLine($"The request for {request.Url} failed: {request.Message}");
+						break;
+					default:
+						throw new Exception("Unexpected RequestStatus " + request.Status);
+				}
 			}
 		}
 	}
